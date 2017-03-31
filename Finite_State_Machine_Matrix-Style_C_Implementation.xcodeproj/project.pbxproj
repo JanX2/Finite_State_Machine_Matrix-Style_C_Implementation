@@ -45,6 +45,7 @@
 				3DC62D921E8D92A7005E9FE7 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		3DC62D921E8D92A7005E9FE7 /* Products */ = {
 			isa = PBXGroup;
