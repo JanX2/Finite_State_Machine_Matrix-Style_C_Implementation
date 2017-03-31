@@ -119,6 +119,7 @@ action stateEvaluation(event e) {
 #endif
     
     assert(isValidState(_currentState));
+    assert(isValidEvent(e));
     
     // Determine the state matrix element depending on the current state and the triggered event.
     stateElement stateTransition = stateMatrix[_currentState][e];
