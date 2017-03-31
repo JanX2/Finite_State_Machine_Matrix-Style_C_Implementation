@@ -23,17 +23,17 @@ typedef enum {
     STATE_1,
     STATE_2,
     STATE_COUNT // Needs to be the last entry.
-} state;
+} state_t;
 
 typedef enum {
     NIL_EVENT = 0,
     EVENT_1,
     EVENT_2,
     EVENT_COUNT // Needs to be the last entry.
-} event;
+} event_t;
 
 #if USE_FUNCTION_POINTERS
-typedef void (*action)(void);
+typedef void (*action_t)(void);
 #else
 typedef enum {
     NIL_ACTION = 0,
@@ -42,24 +42,24 @@ typedef enum {
     ACTION_3,
     ACTION_4,
     ACTION_COUNT // Needs to be the last entry.
-} action;
+} action_t;
 #endif
 
 typedef struct {
-    state nextState;
-    action actionToTrigger;
+    state_t nextState;
+    action_t actionToTrigger;
 } stateElement;
 
 
 // Evil global.
 // Could be encapsulated in a state machine state struct that is passed around.
-state _currentState;
+state_t _currentState;
 
 
 #if USE_FUNCTION_POINTERS
-void stateEvaluation(event e);
+void stateEvaluation(event_t e);
 #else
-action stateEvaluation(event e);
+action_t stateEvaluation(event_t e);
 #endif
 
 
@@ -103,19 +103,19 @@ stateElement stateMatrix[STATE_COUNT][EVENT_COUNT] = {
 #endif
 
 
-bool isValidState(state state) {
+bool isValidState(state_t state) {
     return ((STATE_0 <= state) && (state < STATE_COUNT));
 }
 
-bool isValidEvent(event event) {
+bool isValidEvent(event_t event) {
     return ((NIL_EVENT <= event) && (event < EVENT_COUNT));
 }
 
 
 #if USE_FUNCTION_POINTERS
-void stateEvaluation(event event) {
+void stateEvaluation(event_t event) {
 #else
-action stateEvaluation(event event) {
+action_t stateEvaluation(event_t event) {
 #endif
     
     assert(isValidState(_currentState));
@@ -143,7 +143,7 @@ void processCurrentStateArgument(const char *argument) {
     char *endPointer;
     errno = 0;
     
-    _currentState = (state)strtoimax(argument, &endPointer, 10);
+    _currentState = (state_t)strtoimax(argument, &endPointer, 10);
     
     if (*endPointer != '\0' || errno != 0) {
         exit(EXIT_FAILURE);
@@ -154,13 +154,13 @@ void processCurrentStateArgument(const char *argument) {
     }
 }
 
-event processEventArgument(const char *argument) {
-    event eventOccured = NIL_EVENT;
+event_t processEventArgument(const char *argument) {
+    event_t eventOccured = NIL_EVENT;
     
     char *endPointer;
     errno = 0;
     
-    eventOccured = (event)strtoimax(argument, &endPointer, 10);
+    eventOccured = (event_t)strtoimax(argument, &endPointer, 10);
     
     if (*endPointer != '\0' || errno != 0) {
         exit(EXIT_FAILURE);
@@ -176,7 +176,7 @@ event processEventArgument(const char *argument) {
 int main(int argc, const char *argv[]) {
     _currentState = STATE_0;
     
-    event eventOccured = NIL_EVENT;
+    event_t eventOccured = NIL_EVENT;
 
     switch (argc) {
         case 0:
@@ -203,7 +203,7 @@ int main(int argc, const char *argv[]) {
     }
     
 #if !USE_FUNCTION_POINTERS
-    action actionToTrigger =
+    action_t actionToTrigger =
 #endif
     stateEvaluation(eventOccured);
     
