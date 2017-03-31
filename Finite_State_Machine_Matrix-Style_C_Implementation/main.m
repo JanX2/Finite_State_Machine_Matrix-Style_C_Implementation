@@ -107,6 +107,10 @@ bool isValidState(state state) {
     return ((STATE_0 <= state) && (state < STATE_COUNT));
 }
 
+bool isValidEvent(event event) {
+    return ((NIL_EVENT <= event) && (event < EVENT_COUNT));
+}
+
 
 #if USE_FUNCTION_POINTERS
 void stateEvaluation(event e) {
@@ -161,7 +165,7 @@ event processEventArgument(const char *argument) {
         exit(EXIT_FAILURE);
     }
     
-    if ((eventOccured < NIL_EVENT) || (EVENT_COUNT <= eventOccured)) {
+    if (!isValidEvent(eventOccured)) {
         exit(EXIT_FAILURE);
     }
     
