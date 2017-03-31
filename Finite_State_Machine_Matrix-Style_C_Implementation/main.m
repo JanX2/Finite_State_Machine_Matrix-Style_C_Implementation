@@ -101,6 +101,12 @@ stateElement stateMatrix[STATE_COUNT][EVENT_COUNT] = {
 };
 #endif
 
+
+bool isValidState(state state) {
+    return ((STATE_0 <= state) && (state < STATE_COUNT));
+}
+
+
 #if USE_FUNCTION_POINTERS
 void stateEvaluation(event e) {
 #else
@@ -134,7 +140,7 @@ void processCurrentStateArgument(const char *argument) {
         exit(EXIT_FAILURE);
     }
     
-    if ((_currentState < STATE_0) || (STATE_COUNT <= _currentState)) {
+    if (!isValidState(_currentState)) {
         exit(EXIT_FAILURE);
     }
 }
