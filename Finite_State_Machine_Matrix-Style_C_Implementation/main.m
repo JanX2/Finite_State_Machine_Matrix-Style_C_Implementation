@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <inttypes.h>
+#include <errno.h>
 
 #define USE_FUNCTION_POINTERS   1
 
@@ -122,16 +124,69 @@ action stateEvaluation(event e) {
 #endif
 
 
+void processCurrentStateArgument(const char *argument) {
+    char *endPointer;
+    errno = 0;
+    
+    _currentState = (state)strtoimax(argument, &endPointer, 10);
+    
+    if (*endPointer != '\0' || errno != 0) {
+        exit(EXIT_FAILURE);
+    }
+    
+    if ((_currentState < STATE_0) || (STATE_COUNT <= _currentState)) {
+        exit(EXIT_FAILURE);
+    }
+}
+
+event processEventArgument(const char *argument) {
+    event eventOccured = NIL_EVENT;
+    
+    char *endPointer;
+    errno = 0;
+    
+    eventOccured = (event)strtoimax(argument, &endPointer, 10);
+    
+    if (*endPointer != '\0' || errno != 0) {
+        exit(EXIT_FAILURE);
+    }
+    
+    if ((eventOccured < NIL_EVENT) || (EVENT_COUNT <= eventOccured)) {
+        exit(EXIT_FAILURE);
+    }
+    
+    return eventOccured;
+}
+
 int main(int argc, const char *argv[]) {
     _currentState = STATE_0;
     
     event eventOccured = NIL_EVENT;
-    
-    // Determine event.
-    if (true) {
-        eventOccured = EVENT_1;
-    }
 
+    switch (argc) {
+        case 0:
+        case 1:
+            exit(EXIT_FAILURE);
+            break;
+            
+        case 2: {
+            processCurrentStateArgument(argv[1]);
+            
+            break;
+        }
+            
+        case 3: {
+            processCurrentStateArgument(argv[1]);
+            eventOccured = processEventArgument(argv[2]);
+            
+            break;
+        }
+            
+        default:
+            exit(EXIT_FAILURE);
+            break;
+    }
+    
 #if !USE_FUNCTION_POINTERS
     action actionToTrigger =
 #endif
