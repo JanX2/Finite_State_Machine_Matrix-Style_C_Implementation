@@ -7,6 +7,7 @@
 //
 
 //#import <Foundation/Foundation.h>
+#include <assert.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -112,6 +113,9 @@ void stateEvaluation(event e) {
 #else
 action stateEvaluation(event e) {
 #endif
+    
+    assert(isValidState(_currentState));
+    
     // Determine the state matrix element depending on the current state and the triggered event.
     stateElement stateTransition = stateMatrix[_currentState][e];
     
