@@ -113,16 +113,16 @@ bool isValidEvent(event event) {
 
 
 #if USE_FUNCTION_POINTERS
-void stateEvaluation(event e) {
+void stateEvaluation(event event) {
 #else
-action stateEvaluation(event e) {
+action stateEvaluation(event event) {
 #endif
     
     assert(isValidState(_currentState));
-    assert(isValidEvent(e));
+    assert(isValidEvent(event));
     
     // Determine the state matrix element depending on the current state and the triggered event.
-    stateElement stateTransition = stateMatrix[_currentState][e];
+    stateElement stateTransition = stateMatrix[_currentState][event];
     
     // Transition to the next state (set current state to the next state obtained from the matrix)…
     _currentState = stateTransition.nextState;
