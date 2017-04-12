@@ -48,7 +48,7 @@ typedef enum {
 typedef struct {
     state_t nextState;
     action_t actionToTrigger;
-} stateElement;
+} state_element_t;
 
 
 // Evil global.
@@ -89,7 +89,7 @@ void action_4() {
 
 
 #if USE_FUNCTION_POINTERS
-stateElement stateMatrix[STATE_COUNT][EVENT_COUNT] = {
+state_element_t stateMatrix[STATE_COUNT][EVENT_COUNT] = {
     { {STATE_0, nil_action}, {STATE_1, action_1}, {STATE_2, action_4} },
     { {STATE_1, nil_action}, {STATE_1, action_3}, {STATE_2, action_2} },
     { {STATE_2, nil_action}, {STATE_2, action_2}, {STATE_2, action_3} },
@@ -122,7 +122,7 @@ action_t stateEvaluation(event_t event) {
     assert(isValidEvent(event));
     
     // Determine the state matrix element depending on the current state and the triggered event.
-    stateElement stateTransition = stateMatrix[_currentState][event];
+    state_element_t stateTransition = stateMatrix[_currentState][event];
     
     // Transition to the next state (set current state to the next state obtained from the matrix)…
     _currentState = stateTransition.nextState;
